@@ -1,2 +1,38 @@
 Commands 
 ================
+
+coa@coa-lab:~$ ip netns list
+qrouter-0bb00b5a-a0fc-4ae8-9ba8-361ce8853503 (id: 9)
+qdhcp-aa021bab-7ddc-4e5f-98ad-ac3769238510 (id: 8)
+qrouter-c6b9667e-42b7-465c-9fc8-38c68fbe7d04 (id: 7)
+qdhcp-51d3a463-8d72-471e-b019-bd053350e995 (id: 6)
+qdhcp-c5e21aae-7c1b-4044-b18c-5be3d3be6d4a (id: 4)
+qdhcp-568717c7-39b9-4a35-9bd6-59f009442912 (id: 5)
+qdhcp-2b44418e-71dd-49a9-8d8b-cd2c1d27de29 (id: 3)
+qdhcp-1d19be5c-39c8-4c79-abcb-27b12764f36a (id: 2)
+qrouter-11920973-3179-4158-bf68-ff10502d8466 (id: 0)
+qrouter-442c7c26-84d9-458b-ba36-da78b40d1a00 (id: 1)
+coa@coa-lab:~$ opestack router list
+-bash: opestack: command not found
+coa@coa-lab:~$ openstack router list
++--------------------------------------+------------------+--------+-------+-------------+----+---------+
+| ID                                   | Name             | Status | State | Distributed | HA | Project |
++--------------------------------------+------------------+--------+-------+-------------+----+---------+
+| 0bb00b5a-a0fc-4ae8-9ba8-361ce8853503 | dev-ew-router    | ACTIVE | DOWN  |             |    |         |
+| 11920973-3179-4158-bf68-ff10502d8466 | public-ns-router | ACTIVE | DOWN  |             |    |         |
+| 442c7c26-84d9-458b-ba36-da78b40d1a00 | demo_NS_router   | ACTIVE | DOWN  |             |    |         |
+| c6b9667e-42b7-465c-9fc8-38c68fbe7d04 | dev-ns-router    | ACTIVE | DOWN  |             |    |         |
++--------------------------------------+------------------+--------+-------+-------------+----+---------+
+coa@coa-lab:~$ ip netns qrouter-442c7c26-84d9-458b-ba36-da78b40d1a00 bash
+Command "qrouter-442c7c26-84d9-458b-ba36-da78b40d1a00" is unknown, try "ip netns help".
+coa@coa-lab:~$ ip netns exec qrouter-442c7c26-84d9-458b-ba36-da78b40d1a00 bash
+setting the network namespace "qrouter-442c7c26-84d9-458b-ba36-da78b40d1a00" failed: Operation not permitted
+coa@coa-lab:~$ sudo ip netns exec qrouter-442c7c26-84d9-458b-ba36-da78b40d1a00 bash
+root@coa-lab:~#  ip netns exec qrouter-442c7c26-84d9-458b-ba36-da78b40d1a00 bash
+root@coa-lab:~# ping 203.0.113.207
+PING 203.0.113.207 (203.0.113.207) 56(84) bytes of data.
+64 bytes from 203.0.113.207: icmp_seq=1 ttl=63 time=6.13 ms
+64 bytes from 203.0.113.207: icmp_seq=2 ttl=63 time=2.19 ms
+64 bytes from 203.0.113.207: icmp_seq=3 ttl=63 time=1.69 ms
+^C
+--- 203.0.113.207 ping statistics ---
