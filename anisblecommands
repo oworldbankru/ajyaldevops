@@ -49,4 +49,22 @@ PasswordAuthentication yes
 
 Save it
 
+use keyg
+=========
+
+ssh-keygen
+
+
+Add the servers 
+==============
+ssh-copy-id server_ip1
+ssh-copy-id server_ip2
+ssh-copy-id server_ip3
+
+Add the ip to ansible host files
+===============================
+cd /etc/ansible
+nano hosts
+add ip of all the nodes in the hostfile
+
 
