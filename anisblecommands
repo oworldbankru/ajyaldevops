@@ -67,4 +67,10 @@ cd /etc/ansible
 nano hosts
 add ip of all the nodes in the hostfile
 
+Tes the ping with all the host
+----------------------------
+
+vishal@ubuntu:/etc/ansible$ ansible all -m ping
+
+
 
