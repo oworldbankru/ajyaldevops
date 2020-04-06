@@ -40,3 +40,13 @@ root@ubuntu:~# visudo
 #includedir /etc/sudoers.d
 ansadmin  ALL=(ALL)     NOPASSWD: ALL
 
+Enable password auth
+=====================
+root@ubuntu:~#  nano /etc/ssh/sshd_config
+
+# Change to no to disable tunnelled clear text passwords
+PasswordAuthentication yes
+
+Save it
+
+
