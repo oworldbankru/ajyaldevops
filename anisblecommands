@@ -12,3 +12,23 @@ total 28
 -rw-r--r-- 1 root root 19985 Mar  4 21:39 ansible.cfg
 drwxr-xr-x 2 root root  4096 Mar  4 21:46 roles
 root@ubuntu:/etc/ansible#
+
+
+vishal@ubuntu:/etc/ansible$ ls -lr
+total 28
+drwxr-xr-x 2 root root  4096 Mar  4 21:46 roles
+-rw-r--r-- 1 root root  1016 Mar  4 21:39 hosts
+-rw-r--r-- 1 root root 19985 Mar  4 21:39 ansible.cfg
+
+Add new user to all the servers
+==================================
+
+vishal@ubuntu:~$ sudo su -
+[sudo] password for vishal:
+root@ubuntu:~# useradd ansadmin
+root@ubuntu:~# passwd ansadmin
+Enter new UNIX password:
+Retype new UNIX password:
+passwd: password updated successfully
+root@ubuntu:~#
+3
