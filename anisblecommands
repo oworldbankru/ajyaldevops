@@ -31,4 +31,11 @@ Enter new UNIX password:
 Retype new UNIX password:
 passwd: password updated successfully
 root@ubuntu:~#
-3
+
+GIVE ROOT PERMISSIONS
+
+root@ubuntu:~# visudo
+
+#includedir /etc/sudoers.d
+ansadmin  ALL=(ALL)     NOPASSWD: ALL
+
