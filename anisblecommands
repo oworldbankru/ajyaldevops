@@ -33,6 +33,7 @@ passwd: password updated successfully
 root@ubuntu:~#
 
 GIVE ROOT PERMISSIONS
+==================================
 
 root@ubuntu:~# visudo
 
