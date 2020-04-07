@@ -115,4 +115,14 @@ vishal@ubuntu:/my_ansible_Dir$ ansible 192.168.17.16:192.168.17.17 -m ping
     "ping": "pong"
 }
 
+================================
+
+how to create group in /etc/ansible/host or any other customer conf
+
+[www]
+192.168.17.16
+[db]
+192.168.17.17
+192.168.17.15
+
 
