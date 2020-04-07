@@ -84,6 +84,17 @@ vishal@ubuntu:/my_ansible_Dir$ ls
 ansible.cfg  hosts  roles
 vishal@ubuntu:/my_ansible_Dir$
 
+vishal@ubuntu:/$ cd my_ansible_Dir/
+vishal@ubuntu:/my_ansible_Dir$ sudo nano ansible.cfg
+
+change the anisble host file path like below
+
+# some basic default values...
+inventory       = ./inventory
+#inventory      = ./hosts1
+
+save and exit
+
 
 
 
