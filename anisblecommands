@@ -152,3 +152,24 @@ vishal@ubuntu:/my_ansible_Dir$ ansible all -m shell -a "free -m"
 vishal@ubuntu:/my_ansible_Dir$ cat ansible.cfg
 [defaults]
 inventory = ./inventory
+
+
+Copy a file from ansible engine to node
+===========================================
+
+vishal@ubuntu:/my_ansible_Dir$ sudo touch newfile
+vishal@ubuntu:/my_ansible_Dir$ sudo nano newfile
+vishal@ubuntu:/my_ansible_Dir$ cat inventory
+[www]
+192.168.17.16
+[db]
+192.168.17.17
+192.168.17.15
+vishal@ubuntu:/my_ansible_Dir$ ansible db -m copy -a "src=./newfile dest=/tmp"
+
+ON OTHER NODES DO THIS
+
+vishal@ubuntu:~$ cd /tmp/
+vishal@ubuntu:/tmp$ cat newfile
+
+
