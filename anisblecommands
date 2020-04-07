@@ -72,5 +72,18 @@ Tes the ping with all the host
 
 vishal@ubuntu:/etc/ansible$ ansible all -m ping
 
+Create your own ansible configution
+-----------------------------------------
+
+vishal@ubuntu:/my_ansible_Dir$ sudo cp /etc/ansible/* /my_ansible_Dir/
+cp: omitting directory '/etc/ansible/roles'
+vishal@ubuntu:/my_ansible_Dir$ ls
+ansible.cfg  hosts
+vishal@ubuntu:/my_ansible_Dir$ sudo cp -r /etc/ansible/* /my_ansible_Dir/
+vishal@ubuntu:/my_ansible_Dir$ ls
+ansible.cfg  hosts  roles
+vishal@ubuntu:/my_ansible_Dir$
+
+
 
 
