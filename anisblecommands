@@ -96,5 +96,23 @@ inventory       = ./inventory
 save and exit
 
 
+===========
+Run Miltiple hsot from ansible
+
+vishal@ubuntu:/my_ansible_Dir$ ansible 192.168.17.16:192.168.17.17 -m ping
+192.168.17.16 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+192.168.17.17 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
 
 
