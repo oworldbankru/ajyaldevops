@@ -225,6 +225,180 @@ module.exports = router;
 Save all of your changes and restart the server. Now, the app should look very different.
 
 
+Step 3
+============
+
+Add Azure AD authentication
+
+Create a new file named .env file in the root of your application, and add the following code.
+
+************
+OAUTH_APP_ID=YOUR_APP_ID_HERE
+OAUTH_APP_PASSWORD=YOUR_APP_PASSWORD_HERE
+OAUTH_REDIRECT_URI=http://localhost:3000/auth/callback
+OAUTH_SCOPES='profile offline_access user.read calendars.read'
+OAUTH_AUTHORITY=https://login.microsoftonline.com/common/
+OAUTH_ID_METADATA=v2.0/.well-known/openid-configuration
+OAUTH_AUTHORIZE_ENDPOINT=oauth2/v2.0/authorize
+OAUTH_TOKEN_ENDPOINT=oauth2/v2.0/token
+*************************
+
+Replace YOUR APP ID HERE with the application ID from the Application Registration Portal, and replace YOUR APP SECRET HERE with the password you generated.
+
+Open ./app.js and add the following line to the top of the file to load the .env file.
+
+require('dotenv').config();
+
+
+
+Step 4
+============
+
+Implement sign-in
+
+Locate the line var indexRouter = require('./routes/index'); in ./app.js. Insert the following code before that line.
+
+***************
+var passport = require('passport');
+var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
+
+// Configure passport
+
+// In-memory storage of logged-in users
+// For demo purposes only, production apps should store
+// this in a reliable storage
+var users = {};
+
+// Passport calls serializeUser and deserializeUser to
+// manage users
+passport.serializeUser(function(user, done) {
+  // Use the OID property of the user as a key
+  users[user.profile.oid] = user;
+  done (null, user.profile.oid);
+});
+
+passport.deserializeUser(function(id, done) {
+  done(null, users[id]);
+});
+
+// Callback function called once the sign-in is complete
+// and an access token has been obtained
+async function signInComplete(iss, sub, profile, accessToken, refreshToken, params, done) {
+  if (!profile.oid) {
+    return done(new Error("No OID found in user profile."), null);
+  }
+
+  // Save the profile and tokens in user storage
+  users[profile.oid] = { profile, accessToken };
+  return done(null, users[profile.oid]);
+}
+
+// Configure OIDC strategy
+passport.use(new OIDCStrategy(
+  {
+    identityMetadata: `${process.env.OAUTH_AUTHORITY}${process.env.OAUTH_ID_METADATA}`,
+    clientID: process.env.OAUTH_APP_ID,
+    responseType: 'code id_token',
+    responseMode: 'form_post',
+    redirectUrl: process.env.OAUTH_REDIRECT_URI,
+    allowHttpForRedirectUrl: true,
+    clientSecret: process.env.OAUTH_APP_PASSWORD,
+    validateIssuer: false,
+    passReqToCallback: false,
+    scope: process.env.OAUTH_SCOPES.split(' ')
+  },
+  signInComplete
+));
+
+********************
+
+This code initializes the Passport.js library to use the passport-azure-ad library, and configures it with the app ID and password for the app.
+
+Now pass the passport object to the Express app. Locate the line app.use('/', indexRouter); in ./app.js. Insert the following code before that line.
+
+
+********
+
+// Initialize passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+***********
+
+
+Create a new file in the ./routes directory named auth.js and add the following code.
+
+*****************
+
+var express = require('express');
+var passport = require('passport');
+var router = express.Router();
+
+/* GET auth callback. */
+router.get('/signin',
+  function  (req, res, next) {
+    passport.authenticate('azuread-openidconnect',
+      {
+        response: res,
+        prompt: 'login',
+        failureRedirect: '/',
+        failureFlash: true,
+        successRedirect: '/'
+      }
+    )(req,res,next);
+  }
+);
+
+router.post('/callback',
+  function(req, res, next) {
+    passport.authenticate('azuread-openidconnect',
+      {
+        response: res,
+        failureRedirect: '/',
+        failureFlash: true
+      }
+    )(req,res,next);
+  },
+  function(req, res) {
+    // TEMPORARY!
+    // Flash the access token for testing purposes
+    req.flash('error_msg', {message: 'Access token', debug: req.user.accessToken});
+    res.redirect('/');
+  }
+);
+
+router.get('/signout',
+  function(req, res) {
+    req.session.destroy(function(err) {
+      req.logout();
+      res.redirect('/');
+    });
+  }
+);
+
+module.exports = router;
+
+******************
+
+Insert the following code before the var app = express(); line.
+
+
+************
+var authRouter = require('./routes/auth');
+**************
+
+
+Then insert the following code after the app.use('/', indexRouter); line.
+
+****************
+
+app.use('/auth', authRouter);
+
+*******************8
+
+Start the server and browse to https://localhost:3000. Click the sign-in button and you should be redirected to https://login.microsoftonline.com. Login with your Microsoft account and consent to the requested permissions. The browser redirects to the app, showing the token.
+
+
 
 
 
