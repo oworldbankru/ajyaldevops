@@ -43,4 +43,40 @@ Restart Docker service after adding the file.
 sudo systemctl restart docker
 
 
+Start OpenShift Origin All-in-One Server
+
+Start OKD server by running the following command:
+=====================================
+
+oc cluster up
+
+The command above will:
+
+    Start OKD Cluster listening on local interface – 127.0.0.1:8443
+    Start a web console listening on all interfaces at /console (127.0.0.1:8443).
+    Launch Kubernetes system components.
+    Provisions registry, router, initial templates, and a default project.
+
+On a successful installation, you should get output similar to below.
+===========
+Login to server …
+Creating initial project "myproject" …
+Server Information …
+OpenShift server started.
+The server is accessible via web console at:
+     https://127.0.0.1:8443
+You are logged in as:
+     User:     developer
+     Password: <any value>
+To login as administrator:
+     oc login -u system:admin
+
+
+
+
+
+
+
+
+
 
