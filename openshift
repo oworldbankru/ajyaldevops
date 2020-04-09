@@ -73,7 +73,7 @@ To login as administrator:
 
 
 
-
+oc cluster up --public-hostname=ip_of-themachine
 
 
 
