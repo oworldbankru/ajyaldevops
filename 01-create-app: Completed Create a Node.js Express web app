@@ -480,7 +480,92 @@ app.use(function(req, res, next) {
 ****************
 
 
+Get calendar data
 
+============================
+
+Get calendar events from Outlook
+
+Start by adding a new method to the ./graph.js file to get the events from the calendar. Add the following function inside the module.exports in ./graph.js.
+
+
+************
+
+getEvents: async function(accessToken) {
+  const client = getAuthenticatedClient(accessToken);
+
+  const events = await client
+    .api('/me/events')
+    .select('subject,organizer,start,end')
+    .orderby('createdDateTime DESC')
+    .get();
+
+  return events;
+}
+
+******************
+
+Create a new file in the ./routes directory named calendar.js, and add the following code.
+
+********************8
+
+var express = require('express');
+var router = express.Router();
+var tokens = require('../tokens.js');
+var graph = require('../graph.js');
+
+/* GET /calendar */
+router.get('/',
+  async function(req, res) {
+    if (!req.isAuthenticated()) {
+      // Redirect unauthenticated requests to home page
+      res.redirect('/')
+    } else {
+      let params = {
+        active: { calendar: true }
+      };
+
+      // Get the access token
+      var accessToken;
+      try {
+        accessToken = await tokens.getAccessToken(req);
+      } catch (err) {
+        res.json(err);
+      }
+
+      if (accessToken && accessToken.length > 0) {
+        try {
+          // Get the events
+          var events = await graph.getEvents(accessToken);
+
+          res.json(events.value);
+        } catch (err) {
+          res.json(err);
+        }
+      }
+    }
+  }
+);
+
+module.exports = router;
+
+********************8
+
+Update ./app.js to use this new route. Add the following line before the var app = express(); line.
+
+************
+var calendarRouter = require('./routes/calendar');
+******************
+
+Then add the following line after the app.use('/auth', authRouter); line.
+
+*********************
+
+app.use('/calendar', calendarRouter);
+
+**********************
+
+Now you can test this. Sign in and click the Calendar link in the nav bar. If everything works, you should see a JSON dump of events on the user's calendar.
 
 
 
